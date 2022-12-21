@@ -1,0 +1,30 @@
+{
+  "name": "mini-reactive",
+  "version": "1.0.0",
+  "description": "mini reactive component",
+  "main": "Todos.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "http-server . -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dperrymorrow/mini-reactive.git"
+  },
+  "keywords": [
+    "reactive",
+    "component",
+    "javascript"
+  ],
+  "author": "David Morrow",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dperrymorrow/mini-reactive/issues"
+  },
+  "homepage": "https://github.com/dperrymorrow/mini-reactive#readme",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
