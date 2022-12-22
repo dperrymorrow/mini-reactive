@@ -37,7 +37,7 @@ export default class Todos extends Component {
   }
 
   addTodo() {
-    const $titleInput = this.$refs.newTodo;
+    const $titleInput = this.$root.querySelector("[name=newTodo]");
 
     this.state.todos.push({
       title: $titleInput.value,
@@ -77,9 +77,9 @@ export default class Todos extends Component {
           </tr>
         </thead>
         <tbody>
-          ${this.state.todos
-            .map(
-              (todo, index) => /*html*/ `<tr>
+          ${this.state.todos.reduce(
+            (html, todo, index) =>
+              (html += /*html*/ `<tr>
                 <td>
                   <input
                     type="checkbox"
@@ -96,15 +96,15 @@ export default class Todos extends Component {
                     Delete
                   </a>
                 </td>
-              </tr>`
-            )
-            .join("")}
+              </tr>`),
+            ""
+          )}
         </tbody>
       </table>
 
       <footer>
         <div class="grid">
-          <input data-ref="newTodo" placeholder="Todo title" type="text" />
+          <input name="newTodo" placeholder="Todo title" type="text" />
           <button data-on="click->addTodo">Add</button>
         </div>
       </footer>
