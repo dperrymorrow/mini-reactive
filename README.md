@@ -2,8 +2,8 @@
 
 a reactive component lib in under 80 lines of JS!
 
-[Working example here](https://dperrymorrow.github.io/mini-reactive/)
-[Example component](https://github.com/dperrymorrow/mini-reactive/blob/main/Todos.js)
+- [Working example here](https://dperrymorrow.github.io/mini-reactive/)
+- [Example component](https://github.com/dperrymorrow/mini-reactive/blob/main/Todos.js)
 
 ## Example Component
 
