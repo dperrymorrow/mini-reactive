@@ -1,111 +1,61 @@
 import Component from "./lib/Component.js";
+import { html } from "./lib/vdom.js";
+import Todo from "./Todo.js";
 
 export default class Todos extends Component {
-  constructor() {
-    super(...arguments);
+  data = this.observe({
+    newTodo: "",
+    title: "Things Todo",
+    todos: [
+      {
+        done: true,
+        title: "Walk the Dog",
+      },
+      {
+        done: false,
+        title: "Grocery Shop",
+      },
+      {
+        done: false,
+        title: "X-Mas Shop",
+      },
+    ],
+  });
 
-    this.state = this.useState({
-      title: "Things Todo",
-      todos: [
-        {
-          done: true,
-          title: "Walk the Dog",
-        },
-        {
-          done: false,
-          title: "Grocery Shop",
-        },
-        {
-          done: false,
-          title: "X-Mas Shop",
-        },
-      ],
-    });
-  }
-
-  toggle({ target }, index) {
-    this.state.todos[index].done = target.checked;
-  }
-
-  updateTitle({ target }) {
-    this.state.title = target.value;
-  }
-
-  deleteTodo(ev, index) {
-    ev.preventDefault();
-    this.state.todos.splice(index, 1);
+  deleteTodo(index) {
+    this.data.todos.splice(index, 1);
   }
 
   addTodo() {
-    const $titleInput = this.$root.querySelector("[name=newTodo]");
-
-    this.state.todos.push({
-      title: $titleInput.value,
+    this.data.todos.push({
+      title: this.data.newTodo,
       done: false,
     });
 
-    $titleInput.value = "";
-    $titleInput.focus();
+    this.data.newTodo = "";
   }
 
-  render() {
-    return /*html*/ `<article>
+  template() {
+    return html`<article>
       <header>
         <hgroup>
-          <h1>${this.state.title}</h1>
-          <h2>
-            An example of a mini reactive component, make changes and watch the
-            DOM update.
-          </h2>
+          <h1>${this.data.title}</h1>
+          <h2>An example of a mini reactive component, make changes and watch the DOM update.</h2>
         </hgroup>
       </header>
 
-      <input
-        type="text"
-        value="${this.state.title}"
-        data-on="input->updateTitle"
-        data-args="title"
-        autofocus
-      />
+      <input type="text" value="${this.data.title}" onInput=${({ target }) => (this.data.title = target.value)} autofocus />
 
       <table role="grid">
-        <thead>
-          <tr>
-            <th>Done</th>
-            <th>Title</th>
-            <th></th>
-          </tr>
-        </thead>
         <tbody>
-          ${this.state.todos.reduce(
-            (html, todo, index) =>
-              (html += /*html*/ `<tr>
-                <td>
-                  <input
-                    type="checkbox"
-                    data-on="click->toggle"
-                    data-args="${index}"
-                    ${todo.done ? "checked" : null}
-                  />
-                </td>
-
-                <td>${todo.done ? `<s>${todo.title}</s>` : todo.title}</td>
-
-                <td>
-                  <a href="#" data-on="click->deleteTodo" data-args="${index}">
-                    Delete
-                  </a>
-                </td>
-              </tr>`),
-            ""
-          )}
+          ${this.data.todos.map((todo, index) => html`<${Todo} todo="${todo}" index=${index} deleteTodo=${this.deleteTodo.bind(this)} />`)}
         </tbody>
       </table>
 
       <footer>
         <div class="grid">
-          <input name="newTodo" placeholder="Todo title" type="text" />
-          <button data-on="click->addTodo">Add</button>
+          <input onInput=${(ev) => (this.data.newTodo = ev.target.value)} value=${this.data.newTodo} placeholder="Todo title" type="text" />
+          <button onClick=${() => this.addTodo()}>Add</button>
         </div>
       </footer>
     </article>`;
