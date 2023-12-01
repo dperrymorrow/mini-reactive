@@ -5,13 +5,15 @@
 
   <body>
     <div class="container" id="app">
-      <!-- app is rendered here -->
+      <!-- app is going to be rendered here -->
     </div>
 
     <script type="module">
       import Todos from "./Todos.js";
-      const $root = document.getElementById("app");
-      $root.replaceChildren(new Todos().render());
+      import { createComponent } from "./lib/vdom.js";
+
+      const app = createComponent({ type: Todos });
+      document.getElementById("app").replaceChildren(app);
     </script>
   </body>
 </html>
