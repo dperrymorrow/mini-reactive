@@ -35,26 +35,26 @@ export default class Todos extends Component {
     this.data.newTodo = "";
   }
 
-  template() {
+  template({ data }) {
     return html`<article>
       <header>
         <hgroup>
-          <h1>${this.data.title}</h1>
+          <h1>${data.title}</h1>
           <h2>An example of a mini reactive component, make changes and watch the DOM update.</h2>
         </hgroup>
       </header>
 
-      <input type="text" value="${this.data.title}" onInput=${({ target }) => (this.data.title = target.value)} autofocus />
+      <input type="text" value="${data.title}" onInput=${({ target }) => (data.title = target.value)} autofocus />
 
       <table role="grid">
         <tbody>
-          ${this.data.todos.map((todo, index) => html`<${Todo} todo="${todo}" index=${index} deleteTodo=${this.deleteTodo.bind(this)} />`)}
+          ${data.todos.map((todo, index) => html`<${Todo} todo="${todo}" index=${index} deleteTodo=${this.deleteTodo.bind(this)} />`)}
         </tbody>
       </table>
 
       <footer>
         <div class="grid">
-          <input onInput=${(ev) => (this.data.newTodo = ev.target.value)} value=${this.data.newTodo} placeholder="Todo title" type="text" />
+          <input onInput=${(ev) => (data.newTodo = ev.target.value)} value=${data.newTodo} placeholder="Todo title" type="text" />
           <button onClick=${() => this.addTodo()}>Add</button>
         </div>
       </footer>

@@ -9,11 +9,9 @@
     </div>
 
     <script type="module">
-      import Todos from "./Todos-fn.js";
-      import { html, createElement } from "./lib/vdom.js";
-
+      import Todos from "./Todos.js";
       const $root = document.getElementById("app");
-      $root.replaceChildren(createElement(html`<${Todos} />`));
+      $root.replaceChildren(new Todos().render());
     </script>
   </body>
 </html>

@@ -7,13 +7,13 @@ export default class Todo extends Component {
     this.props.deleteTodo(this.props.index);
   }
 
-  template() {
+  template({ props: { todo } }) {
     return html`<tr>
       <td>
-        <input type="checkbox" role="switch" checked=${this.props.todo.done} onClick="${() => (this.props.todo.done = !this.props.todo.done)}" />
+        <input type="checkbox" role="switch" checked=${todo.done} onClick="${() => (todo.done = !todo.done)}" />
       </td>
 
-      <td>${this.props.todo.done ? html`<s>${this.props.todo.title}</s>` : this.props.todo.title}</td>
+      <td>${todo.done ? html`<s>${todo.title}</s>` : todo.title}</td>
 
       <td>
         <a href="#" onClick=${(ev) => this.remove(ev)}>Delete</a>
