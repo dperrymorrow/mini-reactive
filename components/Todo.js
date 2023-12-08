@@ -1,20 +1,17 @@
 import { html } from "../lib/vdom.js";
 
 export default function ({ remove, todo }) {
-  function toggle() {
-    todo.done = !todo.done;
-  }
+  return html`<tr>
+    <td>
+      <input type="checkbox" role="switch" checked=${todo.done} onClick=${() => (todo.done = !todo.done)} />
+    </td>
 
-  return () =>
-    html`<tr>
-      <td>
-        <input type="checkbox" role="switch" checked=${todo.done} onClick=${() => toggle()} />
-      </td>
+    <td style="opacity: ${todo.done ? 0.3 : 1}">${todo.done ? html`<s>${todo.title}</s>` : todo.title}</td>
 
-      <td style="opacity: ${todo.done ? 0.3 : 1}">${todo.done ? html`<s>${todo.title}</s>` : todo.title}</td>
-
-      <td>
-        <button class="outline" onClick=${() => remove()}>Delete</button>
-      </td>
-    </tr>`;
+    <td>
+      <a class="contrast" href="#" onClick.prevent=${remove}>
+        <span class="material-symbols-outlined"> delete </span>
+      </a>
+    </td>
+  </tr>`;
 }
