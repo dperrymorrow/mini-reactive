@@ -4,13 +4,13 @@ import Header from "./Header.js";
 import NewForm from "./NewForm.js";
 import { faker } from "https://cdn.skypack.dev/@faker-js/faker";
 
-export default function (props, { observe }) {
-  const state = observe({
+export default function Todos(props, { useState }) {
+  const [getState, setState] = useState({
     sort: {
       field: "title",
       dir: "ASC",
     },
-    todos: [...Array(50)].map(() => {
+    todos: [...Array(100)].map(() => {
       return {
         id: faker.string.uuid(),
         done: false,
@@ -19,9 +19,18 @@ export default function (props, { observe }) {
     }),
   });
 
-  function deleteTodo(todoId) {
+  const state = getState();
+
+  function remove(todoId) {
     const index = state.todos.findIndex(({ id }) => id === todoId);
     state.todos.splice(index, 1);
+    setState(state);
+  }
+
+  function toggle(todoId) {
+    const todo = state.todos.find(({ id }) => id === todoId);
+    todo.done = !todo.done;
+    setState(state);
   }
 
   function addTodo(title) {
@@ -30,16 +39,21 @@ export default function (props, { observe }) {
       done: false,
       id: faker.string.uuid(),
     });
+    setState(state);
   }
 
   const { dir, field } = state.sort;
 
-  const sorted = [...state.todos].sort((a, b) => {
+  const sorted = state.todos.sort((a, b) => {
     if (field === "done") return a.done - b.done;
     if (field === "title") return a.title.localeCompare(b.title);
   });
 
   if (dir === "DESC") sorted.reverse();
+
+  function onSort(sort) {
+    setState({ ...state, sort });
+  }
 
   return html`<article>
     <header>
@@ -49,10 +63,12 @@ export default function (props, { observe }) {
       </hgroup>
     </header>
 
+    <pre>${JSON.stringify(state.sort, null, 2)}</pre>
+
     <table role="grid">
-      <${Header} sort=${state.sort} />
+      <${Header} sort=${state.sort} onSort=${onSort} />
       <tbody>
-        ${sorted.map((todo) => html`<${Todo} todo="${todo}" remove=${() => deleteTodo(todo.id)} data-key=${todo.id} />`)}
+        ${sorted.map((todo) => html`<${Todo} todo=${todo} remove=${remove} toggle=${toggle} data-key=${todo.id} />`)}
       </tbody>
     </table>
      <${NewForm} add=${addTodo} //>

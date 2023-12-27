@@ -1,14 +1,16 @@
 import { html } from "../lib/vdom.js";
 
-export default function ({ sort }) {
+export default function Header({ sort, onSort }) {
+  console.log("rendered", sort);
+
   function sortBy(ev) {
-    const field = ev.target.value;
-    sort.field = field;
+    onSort({ ...sort, field: ev.target.value });
   }
 
   function sortDir(ev) {
-    const dir = ev.target.value;
-    sort.dir = dir;
+    debugger;
+
+    onSort({ ...sort, dir: ev.target.value });
   }
 
   return html`
@@ -35,12 +37,8 @@ export default function ({ sort }) {
       </tr>
 
       <tr>
-        <th>
-          <a href="#" onClick.prevent=${() => (sort.field = "done")}>Done? </a>
-        </th>
-        <th>
-          <a href="#" onClick.prevent=${() => (sort.field = "title")}>Title</a>
-        </th>
+        <th>Done</th>
+        <th>Title</th>
         <th></th>
       </tr>
     </thead>
