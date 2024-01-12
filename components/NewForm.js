@@ -1,22 +1,24 @@
-import { html } from "../lib/vdom.js";
+import { html, Component } from "../lib/index.js";
 
-export default function NewForm({ add }, { useState, select }) {
-  const [getState, setState] = useState({ title: "" });
-  const state = getState();
+export default class NewForm extends Component {
+  title = "Placeholder";
 
-  function create() {
-    // const $input = select("input");
-    // add(state.title);
-    // $input.value = "";
-    // $input.focus();
+  onInput({ target }) {
+    this.props.addTodo();
+    this.title = target.value;
+    this.reRender();
   }
 
-  console.log("reRender");
+  created() {}
 
-  return html`<footer style="position:sticky; bottom: 0;">
-    <div class="grid">
-      <input placeholder="Todo title" value=${state.title} onInput=${(ev) => setState({ title: ev.target.value })} type="text" />
-      <button onClick=${create}>Add</button>
-    </div>
-  </footer>`;
+  template() {
+    return html`<footer style="position:sticky; bottom: 0;">
+      <div class="grid">
+        <label :dataTitle=${this.title}>${this.title}</label>
+
+        <input placeholder="Todo title" onInput=${this.onInput.bind(this)} type="text" />
+        <button>Add</button>
+      </div>
+    </footer>`;
+  }
 }

@@ -1,76 +1,49 @@
-import { html } from "../lib/vdom.js";
-import Todo from "./Todo.js";
-import Header from "./Header.js";
+import { Component, html, randomId } from "../lib/index.js";
 import NewForm from "./NewForm.js";
-import { faker } from "https://cdn.skypack.dev/@faker-js/faker";
 
-export default function Todos(props, { useState }) {
-  const [getState, setState] = useState({
+export default class Todos extends Component {
+  debug = true;
+
+  data = {
     sort: {
       field: "title",
       dir: "ASC",
     },
-    todos: [...Array(100)].map(() => {
+    todos: [...Array(10)].map((num, index) => {
+      const id = randomId();
       return {
-        id: faker.string.uuid(),
+        id,
         done: false,
-        title: faker.lorem.sentence(),
+        title: `thing todo #${id}`,
       };
     }),
-  });
+  };
 
-  const state = getState();
+  template() {
+    function addTodo() {
+      console.log("boom");
+    }
 
-  function remove(todoId) {
-    const index = state.todos.findIndex(({ id }) => id === todoId);
-    state.todos.splice(index, 1);
-    setState(state);
+    const { sort } = this.data;
+
+    return html`<article>
+      <header>
+        <hgroup>
+          <h1 :sortField=${sort.field}>${sort.field}</h1>
+          <h2 :sortDir=${sort.dir}>${sort.dir}</h2>
+        </hgroup>
+      </header>
+
+      <input type="text" value=${sort.field} onInput=${(ev) => (this.data.sort.field = ev.target.value)} />
+      <input type="text" value=${sort.dir} onInput=${(ev) => (this.data.sort.dir = ev.target.value)} />
+
+      <button onClick=${this.reRender.bind(this)}>Re-Render</button>
+
+      <table role="grid" :todos=${this.data.todos.length}>
+        <tbody></tbody>
+      </table>
+
+      <${NewForm} todos=${this.data.todos} onClick=${addTodo}//>
+    </article>`;
   }
-
-  function toggle(todoId) {
-    const todo = state.todos.find(({ id }) => id === todoId);
-    todo.done = !todo.done;
-    setState(state);
-  }
-
-  function addTodo(title) {
-    state.todos.push({
-      title,
-      done: false,
-      id: faker.string.uuid(),
-    });
-    setState(state);
-  }
-
-  const { dir, field } = state.sort;
-
-  const sorted = state.todos.sort((a, b) => {
-    if (field === "done") return a.done - b.done;
-    if (field === "title") return a.title.localeCompare(b.title);
-  });
-
-  if (dir === "DESC") sorted.reverse();
-
-  function onSort(sort) {
-    setState({ ...state, sort });
-  }
-
-  return html`<article>
-    <header>
-      <hgroup>
-        <h1>ToDo List</h1>
-        <h2>An example of a mini reactive component, make changes and watch the DOM update.</h2>
-      </hgroup>
-    </header>
-
-    <pre>${JSON.stringify(state.sort, null, 2)}</pre>
-
-    <table role="grid">
-      <${Header} sort=${state.sort} onSort=${onSort} />
-      <tbody>
-        ${sorted.map((todo) => html`<${Todo} todo=${todo} remove=${remove} toggle=${toggle} data-key=${todo.id} />`)}
-      </tbody>
-    </table>
-     <${NewForm} add=${addTodo} //>
-  </article>`;
 }

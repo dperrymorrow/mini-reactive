@@ -11,10 +11,10 @@
 
     <script type="module">
       import Todos from "./components/Todos.js";
-      import { createComponent } from "./lib/vdom.js";
+      import { Component } from "./lib/index.js";
 
-      const app = createComponent({ type: Todos });
-      document.getElementById("app").replaceChildren(app);
+      const app = new Todos();
+      document.getElementById("app").replaceChildren(app.render());
     </script>
   </body>
 </html>
