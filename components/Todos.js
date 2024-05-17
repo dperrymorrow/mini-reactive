@@ -1,7 +1,7 @@
 import { html } from "../lib/vdom.js";
 import Todo from "./Todo.js";
 import Header from "./Header.js";
-import { faker } from "https://cdn.skypack.dev/@faker-js/faker";
+import { faker } from "https://esm.sh/@faker-js/faker@v8.4.0";
 
 export default function (props, { observe }) {
   const state = observe({
