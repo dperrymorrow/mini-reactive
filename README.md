@@ -45,3 +45,12 @@ export default class MyComponent extends Component {
   $root.innerHTML = new App($root).render();
 </script>
 ```
+
+## To run the example here
+
+1. clone this repo
+1. cd into directory
+1. `npm install`
+1. `npm run dev`
+1. go to localhost:8000 in your browser
+
